@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { SketchPicker } from "react-color";
 import { hexToRgbA } from "../lib/utils";
 
-function ItemColorSection() {
-  const [color, setColor] = useState("");
-
+function ItemColorSection({ setColor }) {
   const [state, setState] = useState({
     displayColorPicker: false,
     color: {
@@ -28,8 +26,8 @@ function ItemColorSection() {
   };
 
   const handleColorChange = (color) => {
-    console.log(color.rgb);
     setState({ ...state, color: color.rgb });
+    setColor(color.rgb);
   };
 
   const showColor = (color) => {
@@ -41,6 +39,7 @@ function ItemColorSection() {
       a: rgba[3],
     };
     setState({ ...state, color: rgba });
+    setColor(rgba);
   };
 
   return (
