@@ -3,5 +3,38 @@
 @tailwind utilities;
 
 body {
-  @apply bg-[#f1faee];
+  @apply bg-[#23203d];
+}
+
+.option-select {
+  @apply px-4 py-2 hover:bg-purple-300 font-medium transition-all duration-200 ease-in-out cursor-pointer;
+}
+
+/* .shirt {
+  width: 800px;
+  height: 600px;
+  background: url("/images/image-6.png") no-repeat;
+  background-size: 100% auto;
+}
+
+.shirt svg {
+  mix-blend-mode: multiply;
+} */
+
+.shirt {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: auto;
+}
+
+.container-product-image {
+  width: 100%;
+  position: relative;
+}
+
+.product-svg {
+  position: relative;
+  z-index: 2;
+  mix-blend-mode: multiply;
 }

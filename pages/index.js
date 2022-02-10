@@ -10,11 +10,23 @@ export default function Home() {
     a: "1",
   });
 
+  const [state, setState] = useState({
+    showClothingOptions: false,
+  });
+
+  const changeClothingOptions = () => {
+    setState({ ...state, showClothingOptions: !state.showClothingOptions });
+  };
+
   return (
     <div className="mb-20">
       <div className="mt-12 px-20 flex items-center">
         <div className="w-2/4">
-          <ItemImageSection color={color}></ItemImageSection>
+          <ItemImageSection
+            color={color}
+            showClothingOptions={state.showClothingOptions}
+            changeClothingOptions={changeClothingOptions}
+          ></ItemImageSection>
         </div>
         <div className="w-2/4">
           <ItemColorSection setColor={setColor}></ItemColorSection>
