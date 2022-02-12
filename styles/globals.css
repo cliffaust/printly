@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-[#23203d];
+  @apply bg-[#f9f5f2];
 }
 
 .option-select {
@@ -37,4 +37,5 @@ body {
   position: relative;
   z-index: 2;
   mix-blend-mode: multiply;
+  width: 100%;
 }
