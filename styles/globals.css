@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-[#f9f5f2];
+  @apply bg-[#f8f1ec];
 }
 
 .option-select {
@@ -21,6 +21,7 @@ body {
 .shirt-container {
   width: 600px;
   height: 600px;
+  outline: none;
 }
 
 .shirt-black {

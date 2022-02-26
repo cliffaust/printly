@@ -133,8 +133,10 @@ function ItemImageSection({
     };
 
     new fabric.Image.fromURL(imageUrl, (img) => {
-      img.scaleToWidth(200);
-      img.scaleToHeight(200);
+      img.scaleToWidth(150);
+      img.scaleToHeight(150);
+      img.top = 30;
+      img.left = 30;
       img.setControlsVisibility(showControls);
       canvi.add(img);
       canvi.bringForward(img);
@@ -153,42 +155,32 @@ function ItemImageSection({
       return canvasObject[0];
     };
 
-    const removeObjectFromCanvas = (objectId) => {
-      const canvasObject = getObjectFromCanvasById(objectId);
-      canvi.remove(canvasObject);
-    };
+    var verticalLine = new fabric.Line(
+      [canvi.width / 2, 0, canvi.width / 2, canvi.height],
+      {
+        strokeDashArray: [5, 5],
+        strokeWidth: 2,
+        stroke: "#0077b6",
+        id: "verticalLine",
+        selectable: false,
+      }
+    );
 
-    canvas.on("selection:cleared", function (e) {
-      removeObjectFromCanvas("horizontalLine");
-      removeObjectFromCanvas("verticalLine");
-    });
+    var horizontalLine = new fabric.Line(
+      [canvi.width, 0, canvi.width, canvi.height],
+      {
+        strokeDashArray: [5, 5],
+        strokeWidth: 2,
+        stroke: "#0077b6",
+        id: "horizontalLine",
+        selectable: false,
+        angle: 90,
+        top: canvi.height / 2,
+      }
+    );
 
-    canvi.on("object:moving", function (e) {
+    canvi.on("object:scaling", function (e) {
       var obj = e.target;
-
-      var verticalLine = new fabric.Line(
-        [canvi.width / 2, 0, canvi.width / 2, canvi.height],
-        {
-          strokeDashArray: [5, 5],
-          strokeWidth: 2,
-          stroke: "#0077b6",
-          id: "verticalLine",
-          selectable: false,
-        }
-      );
-
-      var horizontalLine = new fabric.Line(
-        [canvi.width, 0, canvi.width, canvi.height],
-        {
-          strokeDashArray: [5, 5],
-          strokeWidth: 2,
-          stroke: "#0077b6",
-          id: "horizontalLine",
-          selectable: false,
-          angle: 90,
-          top: canvi.height / 2,
-        }
-      );
 
       let verticalLineExists = getObjectFromCanvasById("verticalLine")
         ? true
@@ -198,13 +190,47 @@ function ItemImageSection({
         ? true
         : false;
 
-      if (obj.getCenterPoint().x >= 300 && obj.getCenterPoint().x <= 303) {
+      if (obj.getCenterPoint().x >= 303 && obj.getCenterPoint().x <= 306) {
         !verticalLineExists ? canvi.add(verticalLine) : null;
       } else {
         removeObjectFromCanvas("verticalLine");
       }
 
-      if (obj.getCenterPoint().y >= 300 && obj.getCenterPoint().y <= 303) {
+      if (obj.getCenterPoint().y >= 303 && obj.getCenterPoint().y <= 306) {
+        !horizontalLineExists ? canvi.add(horizontalLine) : null;
+      } else {
+        removeObjectFromCanvas("horizontalLine");
+      }
+    });
+
+    const removeObjectFromCanvas = (objectId) => {
+      const canvasObject = getObjectFromCanvasById(objectId);
+      canvi.remove(canvasObject);
+    };
+
+    canvi.on("selection:cleared", function (e) {
+      removeObjectFromCanvas("horizontalLine");
+      removeObjectFromCanvas("verticalLine");
+    });
+
+    canvi.on("object:moving", function (e) {
+      var obj = e.target;
+
+      let verticalLineExists = getObjectFromCanvasById("verticalLine")
+        ? true
+        : false;
+
+      let horizontalLineExists = getObjectFromCanvasById("horizontalLine")
+        ? true
+        : false;
+
+      if (obj.getCenterPoint().x >= 303 && obj.getCenterPoint().x <= 306) {
+        !verticalLineExists ? canvi.add(verticalLine) : null;
+      } else {
+        removeObjectFromCanvas("verticalLine");
+      }
+
+      if (obj.getCenterPoint().y >= 303 && obj.getCenterPoint().y <= 306) {
         !horizontalLineExists ? canvi.add(horizontalLine) : null;
       } else {
         removeObjectFromCanvas("horizontalLine");
