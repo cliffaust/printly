@@ -101,6 +101,7 @@ function ItemImageSection({
     new fabric.Canvas("canvas", {
       height: 600,
       width: 600,
+      preserveObjectStacking: false,
       // backgroundColor: "pink",
     });
   const onResize = (event, { element, size, handle }) => {
@@ -115,21 +116,100 @@ function ItemImageSection({
     //   fill: "yellow",
     // });
 
+    var text = new fabric.Text("Angle: 0.00°", {
+      top: -10,
+      left: 100,
+      fontSize: 16,
+      fill: "#FFFFFF",
+      backgroundColor: "#112244",
+    });
+
+    const updateAngleText = (obj, text) => {
+      var rotHandlePos = obj.oCoords.mt;
+      var angle = (obj.angle % 360).toFixed(1);
+      text.text = angle + "°";
+      text.top = rotHandlePos.y - 70;
+      text.left = rotHandlePos.x - text.width / 2;
+    };
+
     new fabric.Image.fromURL(imageUrl, (img) => {
       img.scaleToWidth(200);
       img.scaleToHeight(200);
       img.setControlsVisibility(showControls);
       canvi.add(img);
-      // canvi.centerObject(img);
+      canvi.bringForward(img);
     });
 
-    var matrix = canvi.getActiveObject();
+    canvi.on("object:rotating", (e) => {
+      var obj = e.target;
 
-    console.log(matrix);
+      updateAngleText(obj, text);
+    });
+
+    const getObjectFromCanvasById = (id) => {
+      const canvasObject = canvi.getObjects().filter((item) => {
+        return item.id === id;
+      });
+      return canvasObject[0];
+    };
+
+    const removeObjectFromCanvas = (objectId) => {
+      const canvasObject = getObjectFromCanvasById(objectId);
+      canvi.remove(canvasObject);
+    };
+
+    canvas.on("selection:cleared", function (e) {
+      removeObjectFromCanvas("horizontalLine");
+      removeObjectFromCanvas("verticalLine");
+    });
 
     canvi.on("object:moving", function (e) {
       var obj = e.target;
-      // if object is too big ignore
+
+      var verticalLine = new fabric.Line(
+        [canvi.width / 2, 0, canvi.width / 2, canvi.height],
+        {
+          strokeDashArray: [5, 5],
+          strokeWidth: 2,
+          stroke: "#0077b6",
+          id: "verticalLine",
+          selectable: false,
+        }
+      );
+
+      var horizontalLine = new fabric.Line(
+        [canvi.width, 0, canvi.width, canvi.height],
+        {
+          strokeDashArray: [5, 5],
+          strokeWidth: 2,
+          stroke: "#0077b6",
+          id: "horizontalLine",
+          selectable: false,
+          angle: 90,
+          top: canvi.height / 2,
+        }
+      );
+
+      let verticalLineExists = getObjectFromCanvasById("verticalLine")
+        ? true
+        : false;
+
+      let horizontalLineExists = getObjectFromCanvasById("horizontalLine")
+        ? true
+        : false;
+
+      if (obj.getCenterPoint().x >= 300 && obj.getCenterPoint().x <= 303) {
+        !verticalLineExists ? canvi.add(verticalLine) : null;
+      } else {
+        removeObjectFromCanvas("verticalLine");
+      }
+
+      if (obj.getCenterPoint().y >= 300 && obj.getCenterPoint().y <= 303) {
+        !horizontalLineExists ? canvi.add(horizontalLine) : null;
+      } else {
+        removeObjectFromCanvas("horizontalLine");
+      }
+
       if (
         obj.currentHeight > obj.canvas.height ||
         obj.currentWidth > obj.canvas.width
